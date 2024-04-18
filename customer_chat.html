@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="CSS/style.css">
+    <title>Customer Chat</title>
+</head>
+<body>
+    <div class="container">
+        <div class="chat">
+			<div class="chat-header">
+				<div class="profile">
+					<div class="left">
+						<h2></h2>
+					</div>
+					<div class="right">
+					</div>
+				</div>
+			</div>
+            <div id="chat" class="chat-box">
+				
+            </div>
+            <div class="chat-footer">
+                <textarea class="sender" id="sender" placeholder="Nama Anda"></textarea>
+                <textarea id="message" placeholder="Tulis pesan..."></textarea>
+                <submit class="button" type="button2" onclick="sendMessage()">Kirim</submit>
+            </div>
+        </div>  
+    </div>
+    <script>
+        function sendMessage() {
+            var sender = document.getElementById('sender').value;
+            var message = document.getElementById('message').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'customer_send_message.php', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function () {
+                if (xhr.status == 200) {
+                    document.getElementById('message').value = '';
+                    getMessages();
+                }
+            };
+            xhr.send('sender=' + sender + '&message=' + message);
+        }
+
+        function getMessages() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'customer_get_messages.php', true);
+            xhr.onload = function () {
+                if (xhr.status == 200) {
+                    document.getElementById('chat').innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+
+        setInterval(getMessages, 1000); // Update setiap 1 detik
+    </script>
+</body>
+</html>
