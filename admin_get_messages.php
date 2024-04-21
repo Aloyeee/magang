@@ -10,10 +10,16 @@ if ($conn->connect_error) {
 $sql = "SELECT * FROM chat_messages ORDER BY timestamp DESC";
 $result = $conn->query($sql);
 
+
+
 if ($result->num_rows > 0) {
     // Output data dari setiap baris
     while($row = $result->fetch_assoc()) {
-        echo "<strong>" . $row["sender"] . "</strong> "."<br>" .$row["message"] . "<br>";
+        if($row["sender"] =="Admin"){
+            echo "<div link rel='stylesheet' href='CSS/style.css' class='chatr'>"."<strong>" . $row["sender"] . "</strong> "."<br>" .$row["message"] . "<br>"."</div>"."<br>";
+        }else{
+           echo "<div link rel='stylesheet' href='CSS/style.css' class='chatl'>"."<strong>" . $row["sender"] . "</strong> "."<br>" .$row["message"] . "<br>"."</div>"."<br>";
+        }
     }
 } else {
     echo "Belum ada pesan";
